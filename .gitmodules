@@ -1,0 +1,9 @@
+[submodule "packages/undo-tree"]
+	path = packages/undo-tree
+	url = git://github.com/emacsmirror/undo-tree.git
+[submodule "packages/popup"]
+	path = packages/popup
+	url = git://github.com/m2ym/popup-el.git
+[submodule "packages/auto-complete"]
+	path = packages/auto-complete
+	url = git://github.com/m2ym/auto-complete.git
