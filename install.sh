@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 INIT=~/.emacs.d/init.el
 SRC_REPOS=tarao/emacs-pervasives
@@ -24,14 +24,16 @@ grep $SIGNATURE $INIT >/dev/null 2>&1 || {
 }
 
 mkdir -p $DST
-pushd $DST
+cd $DST
 
+LOAD="-L ."
 for repos in m2ym/popup-el m2ym/auto-complete emacsmirror/undo-tree; do
     [ -d "$repos" ] || svn checkout "$GITHUB/$repos/trunk" "$repos"
-    for f in `ls $repos/*.el`; do
-        [ -e `basename "$f"` ] || ln -s  "$f" `basename "$f"`
-        emacs -L . --batch -f batch-byte-compile `basename "$f"`
+    last=`pwd`
+    cd "$repos"
+    for f in `ls *.el`; do
+        emacs $LOAD --batch -f batch-byte-compile "$f"
     done
+    cd "$last"
+    LOAD="$LOAD -L $last/$repos"
 done
-
-popd
