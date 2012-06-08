@@ -9,6 +9,23 @@ DST=$EMACSD/site-lisp
 GITHUB=https://github.com
 SIGNATURE="emacs-pervasives"
 
+VCS=""
+REPOS_DIR=""
+
+(which svn >/dev/null && [ -x `which svn` ]) && {
+    VCS="svn checkout"
+    REPOS_DIR="/trunk"
+}
+(which git >/dev/null && [ -x `which git` ]) && {
+    VCS="git clone"
+    REPOS_DIR=""
+}
+
+[ "x$VCS" = 'x' ] && {
+    echo "You need to have git or svn installed."
+    exit
+}
+
 mkdir -p $EMACSD
 
 for f in ~/.emacs ~/.emacs.el ~/.emacs.d/init.el; do
@@ -28,7 +45,7 @@ cd $DST
 
 LOAD="-L ."
 for repos in m2ym/popup-el m2ym/auto-complete emacsmirror/undo-tree; do
-    [ -d "$repos" ] || svn checkout "$GITHUB/$repos/trunk" "$repos"
+    [ -d "$repos" ] || $VCS "$GITHUB/$repos$REPOS_DIR" "$repos"
     last=`pwd`
     cd "$repos"
     for f in `ls *.el`; do
