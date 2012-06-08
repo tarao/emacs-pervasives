@@ -7,6 +7,8 @@ DST=$EMACSD/site-lisp
 GITHUB=https://github.com
 SIGNATURE="emacs-pervasives"
 
+mkdir -p $EMACSD
+
 for f in ~/.emacs ~/.emacs.el ~/.emacs.d/init.el; do
     [ -w "$f" ] && {
         INIT=$f
