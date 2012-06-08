@@ -2,7 +2,8 @@
 
 INIT=~/.emacs.d/init.el
 SRC=https://github.com/tarao/emacs-pervasives
-DST=~/.emacs.d/site-lisp
+EMACSD=~/.emacs.d
+DST=$EMACSD/site-lisp
 GITHUB=https://github.com
 SIGNATURE="emacs-pervasives"
 
