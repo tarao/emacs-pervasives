@@ -1,7 +1,9 @@
 #! /bin/bash
 
 INIT=~/.emacs.d/init.el
-SRC=https://github.com/tarao/emacs-pervasives
+SRC_REPOS=tarao/emacs-pervasives
+SRC=https://github.com/$SRC_REPOS
+RAW_SRC=https://raw.github.com/$SRC_REPOS/master
 EMACSD=~/.emacs.d
 DST=$EMACSD/site-lisp
 GITHUB=https://github.com
@@ -18,7 +20,7 @@ done
 
 echo "Emacs init file: $INIT"
 grep $SIGNATURE $INIT >/dev/null 2>&1 || {
-    wget -O - $SRC/init.el >> $INIT
+    wget -O - $RAW_SRC/init.el >> $INIT
 }
 
 mkdir -p $DST
