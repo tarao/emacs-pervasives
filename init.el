@@ -186,8 +186,8 @@
 ;; C/C++用にflymakeを初期化する関数
 (defun flymake-cc-init ()
   (let ((cmd (cond
-              ((eq major-mode 'c-mode) "/usr/bin/gcc")
-              ((eq major-mode 'c++-mode) "/usr/bin/g++")
+              ((eq major-mode 'c-mode) "/usr/bin/env gcc")
+              ((eq major-mode 'c++-mode) "/usr/bin/env g++")
               (t nil))))
     (let* ((temp-file (flymake-init-create-temp-buffer-copy
                        'flymake-create-temp-inplace))
