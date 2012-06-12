@@ -1,0 +1,9 @@
+= EMACS-PERVASIVES
+
+== INSTALL
+
+  wget -O - j.mp/emacs-pervasives | sh -s
+
+or
+
+  curl -L j.mp/emacs-pervasives | sh -s
