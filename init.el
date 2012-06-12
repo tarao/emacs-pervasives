@@ -169,6 +169,7 @@
         ))
 
 ;; Makefileにインクルード設定があったらそれもコンパイラに渡す関数
+;; (ライブラリの利用のためにインクルードディレクトリを追加した場合に必要)
 (defun flymake-extract-includes-from-makefile ()
   (let ((buf (current-buffer))
         (dir (file-name-directory (or (buffer-file-name) ""))))
