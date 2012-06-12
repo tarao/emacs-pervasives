@@ -4,7 +4,7 @@ INIT=~/.emacs.d/init.el
 
 SRC_REPOS=tarao/emacs-pervasives
 GITHUB=http://github.com
-RAW_GITHUB=http://raw.github.com
+RAW_GITHUB=https://raw.github.com
 SRC=$GITHUB/$SRC_REPOS
 RAW_SRC=$RAW_GITHUB/$SRC_REPOS/master
 EMACSD=~/.emacs.d
