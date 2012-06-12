@@ -158,6 +158,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C/C++
 
+;; コンパイラのパス
+(setq flymake-c-command "/usr/bin/gcc")
+(setq flymake-cc-command "/usr/bin/g++")
+
 ;; コンパイラに渡すオプション
 (setq flymake-cc-command-opt
       '("-fsyntax-only"
@@ -187,8 +191,8 @@
 ;; C/C++用にflymakeを初期化する関数
 (defun flymake-cc-init ()
   (let ((cmd (cond
-              ((eq major-mode 'c-mode) "/usr/bin/env gcc")
-              ((eq major-mode 'c++-mode) "/usr/bin/env g++")
+              ((eq major-mode 'c-mode) flymake-c-command)
+              ((eq major-mode 'c++-mode) flymake-cc-command)
               (t nil))))
     (let* ((temp-file (flymake-init-create-temp-buffer-copy
                        'flymake-create-temp-inplace))
