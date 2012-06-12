@@ -82,9 +82,9 @@
 ;;   M-p  前の候補
 ;;   TAB  候補の確定
 ;;   C-m  候補の確定
-(require 'auto-complete nil t)
-(global-auto-complete-mode t)
-(setq ac-auto-show-menu 0.5)
+(when (require 'auto-complete nil t)
+  (global-auto-complete-mode t)
+  (setq ac-auto-show-menu 0.5))
 
 ;; デフォルトタブ幅4, タブはスペースを挿入
 (setq-default tab-width 4
@@ -100,9 +100,9 @@
 ;;     f    右の枝を選択
 ;;     b    左の枝を選択
 ;;     q    ツリーを閉じる
-(require 'undo-tree nil t)
-(global-undo-tree-mode)
-(setq undo-tree-mode-lighter nil)
+(when (require 'undo-tree nil t)
+  (global-undo-tree-mode)
+  (setq undo-tree-mode-lighter nil))
 
 ;; GDBで実行中の行をハイライト
 (defadvice gdb-display-source-buffer
