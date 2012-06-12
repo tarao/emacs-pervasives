@@ -70,7 +70,7 @@
 (setq-default show-trailing-whitespace t)
 
 ;; C-x C-bでバッファ選択画面を開く
-(global-set-key (kbd "C-x C-b") 'buffer-menu)
+(global-set-key (kbd "C-x C-b") 'bs-show)
 
 ;; 同じ名前のファイルを開いたときにfile<2>ではなくdir/fileという表示にする
 (require 'uniquify)
