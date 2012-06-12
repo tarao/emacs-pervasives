@@ -2,9 +2,11 @@
 ;; emacs-pervasives ver. 1.00
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Include ~/.emacs.d in the load path
 ;; ~/.emacs.d下に入れたファイルをload,require等で読み込めるようにする
 (setq load-path (cons "~/.emacs.d" load-path))
 
+;; Include (sub-)directories under ~/.emacs.d/site-lisp in the load path
 ;; ~/.emacs.d/site-lisp下に入れたファイルを(サブディレクトリ内のものも
 ;; 含め)load,require等で読み込めるようにする
 (when (fboundp 'normal-top-level-add-subdirs-to-load-path)
@@ -14,41 +16,53 @@
       (setq load-path (cons dir load-path))
       (normal-top-level-add-subdirs-to-load-path))))
 
+;; Do not show startup messages
 ;; 起動時に表示されるメッセージ, *scratch*バッファのメッセージ等を表示しない
 (setq inhibit-startup-message t
       inhibit-startup-screen t
       initial-scratch-message nil)
 
+;; Ask y/n instead of yes/no
 ;; yes/noではなくy/nで訊くようにする
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; Show row and column of the cursor position
 ;; カーソル位置の行番号と桁数を表示する
 (setq column-number-mode t)
 
+;; Hide toolbar
 ;; ツールバーを非表示にする
 ;(setq tool-bar-mode nil)
 
+;; Hide menubar
 ;; メニューバーを非表示にする
 ;(setq menu-bar-mode nil)
 
+;; Highlight matching parenthesis
 ;; 対応する括弧をハイライトする
 (show-paren-mode t)
 
+;; Highlight selected region
 ;; 選択範囲を表示する
 (setq transient-mark-mode t)
 
+;; Kill selected region by BS
 ;; 範囲選択中にバックスペースで選択範囲を削除する
 (delete-selection-mode t)
 
+;; Show line number
 ;; 行番号を(常に)表示する
 (global-linum-mode)
 
+;; Highlight the current line
 ;; カーソル位置の行をハイライトする
 ;(global-hl-line-mode)
 
+;; Do not blink cursor
 ;; カーソルを点滅しない
 (blink-cursor-mode nil)
 
+;; Show special character (») for wrapped line end
 ;; 長い行を折り返したときに記号(»)を表示する
 (defface wrap-face
   '((((class color) (min-colors 88) (background dark))
@@ -66,16 +80,25 @@
 (set-display-table-slot standard-display-table 'wrap
                         (make-glyph-code #xbb 'wrap-face))
 
+;; Highlight whitespace at EOL
 ;; 行末の空白をハイライトする
 (setq-default show-trailing-whitespace t)
 
+;; C-x C-b shows buffer selector
 ;; C-x C-bでバッファ選択画面を開く
 (global-set-key (kbd "C-x C-b") 'bs-show)
 
+;; Put directory names for the same name of different files
 ;; 同じ名前のファイルを開いたときにfile<2>ではなくdir/fileという表示にする
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
+;; Auto completion like IntelliSense
+;; [Key Bindings]
+;;   M-n  next candidate
+;;   M-p  previous candidate
+;;   TAB  do complete
+;;   C-m  do complete
 ;; IntelliSenseのようなオートコンプリート
 ;; [補完候補のキーバインド]
 ;;   M-n  次の候補
@@ -86,17 +109,27 @@
   (global-auto-complete-mode t)
   (setq ac-auto-show-menu 0.5))
 
+;; Use 4-space soft tab by default
 ;; デフォルトタブ幅4, タブはスペースを挿入
 (setq-default tab-width 4
               indent-tabs-mode nil)
 
+;; Treat undo history as a tree
+;; [Key Bindings]
+;;   C-/    undo
+;;   M-_    redo
+;;   C-x u  show history as a tree
+;;     p    go up the tree (undo)
+;;     n    go down the tree (redo)
+;;     f    select right branch of the tree
+;;     b    select left branch of the tree
 ;; 元に戻す/やり直しをツリー状に管理
 ;; [キーバインド]
 ;;   C-/    元に戻す
 ;;   M-_    やり直し
 ;;   C-x u  編集履歴ツリーを表示
-;;     n    ツリーを下る
-;;     p    ツリーを上る
+;;     p    ツリーを上る (元に戻す)
+;;     n    ツリーを下る (やり直し)
 ;;     f    右の枝を選択
 ;;     b    左の枝を選択
 ;;     q    ツリーを閉じる
@@ -104,25 +137,31 @@
   (global-undo-tree-mode)
   (setq undo-tree-mode-lighter nil))
 
+;; Highlight the current line on GDB source buffer
 ;; GDBで実行中の行をハイライト
 (defadvice gdb-display-source-buffer
   (after ad-hl-line-source-buffer (buffer) activate)
   (with-current-buffer buffer (hl-line-mode 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; flymake - 裏で自動コンパイルしてエラー箇所を表示
+;; flymake
+;;   Compile background and show errors on the fly
+;;   裏で自動コンパイルしてエラー箇所を表示
 
 (require 'flymake)
 
+;; Compilation runs when it is idle for 3 seconds
 ;; 3秒間操作しなかったらコンパイルする
 (setq flymake-no-change-timeout 3)
 
+;; colors
 ;; 色設定
 (set-face-background 'flymake-errline "red4")
 (set-face-foreground 'flymake-errline "black")
 (set-face-background 'flymake-warnline "yellow")
 (set-face-foreground 'flymake-warnline "black")
 
+;; Shows errors on the minibuffer
 ;; エラーをミニバッファに表示
 ;; http://d.hatena.ne.jp/xcezx/20080314/1205475020
 (defun flymake-display-err-minibuf ()
@@ -145,11 +184,13 @@
           (message "[%s] %s" line text)))
       (setq count (1- count)))))
 
+;; Automatically show errors on the minibuffer
 ;; エラーをミニバッファに表示するのを自動的にやる
 (defadvice flymake-post-syntax-check
   (after flymake-display-err-minibuf-auto last activate)
   (flymake-display-err-minibuf))
 
+;; Do nothing if visiting something other than a file
 ;; ファイル以外を編集中は何もしない
 (defadvice flymake-get-init-function
   (around flymake-ignore-non-file (file-name) activate)
@@ -158,10 +199,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C/C++
 
+;; Compiler paths
 ;; コンパイラのパス
 (setq flymake-c-command "/usr/bin/gcc")
 (setq flymake-cc-command "/usr/bin/g++")
 
+;; Compiler options
 ;; コンパイラに渡すオプション
 (setq flymake-cc-command-opt
       '("-fsyntax-only"
@@ -172,6 +215,7 @@
         ;; "-Weffc++" "-Wold-style-cast" "-Woverloaded-virtual"
         ))
 
+;; Pass include directory settings in Makefile to the compiler
 ;; Makefileにインクルード設定があったらそれもコンパイラに渡す関数
 ;; (ライブラリの利用のためにインクルードディレクトリを追加した場合に必要)
 (defun flymake-extract-includes-from-makefile ()
@@ -188,6 +232,7 @@
                     (set (make-local-variable 'flymake-cc-command-opt)
                          (append includes flymake-cc-command-opt))))))))))
 
+;; Initialization for C/C++
 ;; C/C++用にflymakeを初期化する関数
 (defun flymake-cc-init ()
   (let ((cmd (cond
@@ -204,6 +249,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C
 
+;; Enable c-mode and flymake automatically for the specific file extensions
 ;; C言語用モードを特定の拡張子で有効にする
 (autoload 'c-mode "cc-mode")
 (setq auto-mode-alist
@@ -212,13 +258,16 @@
               auto-mode-alist))
 (push '("\\.c$" flymake-cc-init) flymake-allowed-file-name-masks)
 
+;; c-mode initialization
 ;; C言語用モード起動時にやること
 (add-hook 'c-mode-hook
           '(lambda ()
+             ;; indentation styles
              ;; インデントスタイル
              (c-set-style "stroustrup")
              (c-set-offset 'innamespace 0)
              (setq c-basic-offset 2)
+             ;; activate flymake
              ;; flymakeを有効にする
              (flymake-extract-includes-from-makefile)
              (flymake-mode t)))
@@ -226,6 +275,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C++
 
+;; Enable cc-mode and flymake automatically for the specific file extensions
 ;; C++用モードを特定の拡張子で有効にする
 (autoload 'c++-mode "cc-mode")
 (setq auto-mode-alist
@@ -237,13 +287,16 @@
               auto-mode-alist))
 (push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)
 
+;; cc-mode initialization
 ;; C++用モード起動時にやること
 (add-hook 'c++-mode-hook
           '(lambda ()
+             ;; indentation styles
              ;; インデントスタイル
              (c-set-style "stroustrup")
              (c-set-offset 'innamespace 0)
              (setq c-basic-offset 2)
+             ;; activate flymake
              ;; flymakeを有効にする
              (flymake-extract-includes-from-makefile)
              (flymake-mode t)))
