@@ -243,3 +243,5 @@
              ;; flymakeを有効にする
              (flymake-extract-includes-from-makefile)
              (flymake-mode t)))
+
+;; emacs-pervasives ends here
