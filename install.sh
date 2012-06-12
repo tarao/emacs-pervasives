@@ -1,12 +1,14 @@
 #! /bin/sh
 
 INIT=~/.emacs.d/init.el
+
 SRC_REPOS=tarao/emacs-pervasives
-SRC=https://github.com/$SRC_REPOS
-RAW_SRC=https://raw.github.com/$SRC_REPOS/master
+GITHUB=http://github.com
+RAW_GITHUB=http://raw.github.com
+SRC=$GITHUB/$SRC_REPOS
+RAW_SRC=$RAW_GITHUB/$SRC_REPOS/master
 EMACSD=~/.emacs.d
 DST=$EMACSD/site-lisp
-GITHUB=https://github.com
 SIGNATURE="emacs-pervasives"
 
 VCS=""
