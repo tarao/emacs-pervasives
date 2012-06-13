@@ -84,6 +84,10 @@
 ;; 行末の空白をハイライトする
 (setq-default show-trailing-whitespace t)
 
+;; Show buffer boundary indicator
+;; バッファの範囲を示すマークを表示する
+(setq-default indicate-buffer-boundaries 'left)
+
 ;; C-x C-b shows buffer selector
 ;; C-x C-bでバッファ選択画面を開く
 (global-set-key (kbd "C-x C-b") 'bs-show)
