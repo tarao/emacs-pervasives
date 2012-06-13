@@ -103,7 +103,7 @@
 ;;   M-p  previous candidate
 ;;   TAB  do complete
 ;;   C-m  do complete
-;; IntelliSenseのようなオートコンプリート
+;; IntelliSenseのような自動補完
 ;; [補完候補のキーバインド]
 ;;   M-n  次の候補
 ;;   M-p  前の候補
