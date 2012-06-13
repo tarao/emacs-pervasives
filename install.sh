@@ -5,14 +5,16 @@ SIGNATURE="emacs-pervasives"
 # remote info
 SRC_REPOS=tarao/emacs-pervasives
 GITHUB=http://github.com
+EMACSWIKI=http://www.emacswiki.org/emacs/download
 RAW_GITHUB=https://raw.github.com
-SRC=$GITHUB/$SRC_REPOS
 RAW_SRC=$RAW_GITHUB/$SRC_REPOS/master
 
 # local info
 EMACSD="$HOME/.emacs.d"
 INIT_EL="$HOME/.emacs $HOME/.emacs.el $HOME/.emacs.d/init.el"
-PACKAGES="m2ym/popup-el m2ym/auto-complete emacsmirror/undo-tree"
+GITHUB_PACKAGES="m2ym/popup-el m2ym/auto-complete emacsmirror/undo-tree"
+EMACSWIKI_PACKAGES="anything.el anything-match-plugin.el anything-config.el \
+    anything-obsolete.el anything-complete.el descbinds-anything.el"
 PACKAGE_DST=$EMACSD/site-lisp
 
 testing() {
@@ -111,6 +113,14 @@ clone() {
     }
 }
 
+emacswiki_get() {
+    echo "Retrieving $EMACSWIKI/$1"
+    testing && return
+
+    sleep 2
+    wcat "$EMACSWIKI/$1" > `basename "$1"`
+}
+
 select_init_el() {
     for f in $@; do
         [ -w "$f" ] && {
@@ -158,13 +168,21 @@ compile_els() {
     cd "$last"
 }
 
-install_packages() {
+install_github_packages() {
     load_path='-L .'
     for repos in "$@"; do
         [ -d "$repos" ] || clone "$repos"
         dir=`pwd`
         compile_els "$load_path" "$repos"
         load_path="$load_path -L $dir/$repos"
+    done
+}
+
+install_emacswiki_packages() {
+    load_path='-L .'
+    for file in "$@"; do
+        [ -e "$" ] || emacswiki_get "$file"
+        emacs_compile "$load_path" `basename "$file"`
     done
 }
 
@@ -179,4 +197,5 @@ mkdir -p "$EMACSD"
 install_init_el
 mkdir -p "$PACKAGE_DST"
 cd "$PACKAGE_DST"
-install_packages $PACKAGES
+install_github_packages $GITHUB_PACKAGES
+install_emacswiki_packages $EMACSWIKI_PACKAGES

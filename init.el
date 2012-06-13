@@ -113,6 +113,52 @@
   (global-auto-complete-mode t)
   (setq ac-auto-show-menu 0.5))
 
+;; Selecting candidates in a sophisticated way
+;; [Key Bindings]
+;;   C-n    next candidate
+;;   Down   next candidate
+;;   C-p    previous candidate
+;;   Up     previous candidate
+;;   Left   next source
+;;   Right  previous source
+;; 様々なものの選択を賢くする
+;; [候補選択のキーバインド]
+;;   C-n    次の候補
+;;   Down   次の候補
+;;   C-p    前の候補
+;;   Up     前の候補
+;;   Left   次の生成元
+;;   Right  前の生成元
+(when (require 'anything-config nil t)
+  (setq dired-bind-jump nil) ; prevent binding to C-x C-j
+
+  ;; Source of file list
+  ;; ファイル選択で使うファイルリストの生成元
+  (setq anything-for-files-prefered-list
+      '(anything-c-source-buffers+
+        anything-c-source-ffap-line
+        anything-c-source-ffap-guesser
+        anything-c-source-recentf
+        anything-c-source-bookmarks
+        anything-c-source-files-in-current-dir+
+        anything-c-source-locate))
+
+  ;; Replace switch-to-buffer with anything-for-files
+  ;; バッファ選択(switch-to-buffer)の代わりにanythingを使う
+  (global-set-key (kbd "C-x b") 'anything-for-files)
+
+  ;; Enable anything on M-x
+  ;; M-xでanythingを有効にする
+  (when (require 'anything-complete nil t)
+    (setq anything-complete-sort-candidates t)
+    (substitute-key-definition 'execute-extended-command
+                               'anything-execute-extended-command global-map))
+
+  ;; Enable anything on M-x describe-bindings
+  ;; M-x describe-bindingsでanythingを有効にする
+  (when (require 'descbinds-anything nil t)
+    (descbinds-anything-install)))
+
 ;; Use 4-space soft tab by default
 ;; デフォルトタブ幅4, タブはスペースを挿入
 (setq-default tab-width 4
