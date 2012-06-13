@@ -65,7 +65,7 @@ pgit_clone() {
 
     executable git && git clone "$url" "$@" && return
     is_github "$url" || return 1
-    executable seeed || {
+    executable sed || {
         echo 'You need sed to retrieve repository without git command' >&2
         return 1
     }
