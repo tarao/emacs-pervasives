@@ -351,4 +351,56 @@
              (flymake-extract-includes-from-makefile)
              (flymake-mode t)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LaTeX
+
+;; Set default-buffer-file-coding-system according to file name
+;; ファイル名に従ってdefault-buffer-file-coding-systemを設定する
+(defvar default-file-coding-system-alist nil
+  "List of pairs of a file name regexp and a coding system.")
+(add-hook 'find-file-hook
+          '(lambda ()
+             (let ((code (assoc-default buffer-file-name
+                                        default-file-coding-system-alist
+                                        'string-match nil)))
+               (when code
+                   (progn
+                     (make-local-variable 'default-buffer-file-coding-system)
+                     (setq default-buffer-file-coding-system code))))))
+
+;; Default TeX mode
+;; デフォルトのTeXモード
+(unless (boundp 'TeX-default-mode)
+  (setq TeX-default-mode 'latex-mode))
+
+(when (string= current-language-environment "Japanese")
+  ;; 日本語用のモードを使う
+  (when (featurep 'tex-site) ;; AUCTeX
+    (setq TeX-default-mode 'japanese-latex-mode))
+
+  ;; 日本語用TeXコマンド
+  (setq japanese-TeX-command-default "pTeX")
+  (setq japanese-LaTeX-command-default "pLaTeX")
+
+  ;; TeX関係のファイルはEUC-JPにする
+  (setq default-file-coding-system-alist
+        (append
+         '(("\\.tex$" . euc-jp-unix)
+           ("\\.sty$" . euc-jp-unix)
+           ("\\.bib$" . euc-jp-unix))
+         default-file-coding-system-alist)))
+
+;; Activate TeX-mode automatically
+;; 自動的にTeX-modeを起動する
+(setq auto-mode-alist
+  (append
+   `(("\\.sty$" . ,TeX-default-mode)
+     ("\\.tex$" . ,TeX-default-mode))
+   auto-mode-alist))
+
+;; Enable reftex
+;; reftexを有効にする
+(add-hook 'TeX-mode-hook 'turn-on-reftex)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+
 ;; emacs-pervasives ends here
